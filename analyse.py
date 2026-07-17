@@ -15,10 +15,17 @@ def analyser(historique):
     frequence_haute = (hautes / total) * 100
     frequence_grosse = (grosses / total) * 100
 
+
     derniers_5 = historique[-5:]
+    derniers_10 = historique[-10:]
+    derniers_20 = historique[-20:]
+    derniers_50 = historique[-50:]
+
+
     moyenne_5 = sum(derniers_5) / len(derniers_5)
 
     precedents = historique[-10:-5]
+
 
     if precedents:
         moyenne_precedents = sum(precedents) / len(precedents)
@@ -36,7 +43,6 @@ def analyser(historique):
         )
 
     else:
-        moyenne_precedents = 0
         tendance = "⏳ Pas assez de données"
         comparaison = "⏳ Pas assez de tours pour comparer"
 
@@ -66,7 +72,7 @@ def analyser(historique):
 
 
     return f"""
-🔮 LuckyJet AI Pro v5.1
+🔮 LuckyJet AI Pro v5.2
 
 📊 Tours analysés : {total}
 
@@ -80,8 +86,19 @@ def analyser(historique):
 📈 Fréquence ≥2x : {frequence_haute:.1f}%
 💎 Fréquence ≥5x : {frequence_grosse:.1f}%
 
+
 🔢 5 derniers tours :
 {derniers_5}
+
+🔟 10 derniers tours :
+{derniers_10}
+
+2️⃣0️⃣ 20 derniers tours :
+{derniers_20}
+
+5️⃣0️⃣ 50 derniers tours :
+{derniers_50}
+
 
 📊 Comparaison récente :
 {comparaison}
