@@ -41,13 +41,11 @@ def analyser(historique):
             f"📈 5 derniers : {moyenne_5:.2f}x\n"
             f"📊 5 précédents : {moyenne_precedents:.2f}x"
         )
-
     else:
         tendance = "⏳ Pas assez de données"
         comparaison = "⏳ Pas assez de tours pour comparer"
 
 
-    # Analyse des 50 derniers tours
     total_50 = len(derniers_50)
 
     moyenne_50 = sum(derniers_50) / total_50
@@ -58,9 +56,7 @@ def analyser(historique):
     frequence_50 = (tours_2x_50 / total_50) * 100
 
 
-    # Série basse actuelle
     serie_basse = 0
-
     for x in reversed(historique):
         if x < 1.5:
             serie_basse += 1
@@ -68,9 +64,7 @@ def analyser(historique):
             break
 
 
-    # Série haute actuelle
     serie_haute = 0
-
     for x in reversed(historique):
         if x >= 2:
             serie_haute += 1
@@ -79,22 +73,47 @@ def analyser(historique):
 
 
     score = 50
+    raisons = []
+
 
     if moyenne >= 2:
         score += 10
+        raisons.append("✅ Moyenne générale correcte")
 
     if frequence_haute >= 50:
         score += 10
+        raisons.append("✅ Fréquence ≥2x acceptable")
 
     if tendance == "📈 Hausse récente":
         score += 10
+        raisons.append("✅ Tendance récente positive")
+
+    if serie_basse >= 3:
+        score -= 10
+        raisons.append("⚠️ Série basse détectée")
+
+
+    if len(historique) < 10:
+        raisons.append("⏳ Peu de données disponibles")
+
 
     if score > 100:
         score = 100
 
+    if score < 0:
+        score = 0
+
+
+    if score >= 80:
+        niveau = "🟢 Conditions statistiques fortes"
+    elif score >= 50:
+        niveau = "🟡 Conditions statistiques moyennes"
+    else:
+        niveau = "🔴 Conditions statistiques faibles"
+
 
     return f"""
-🔮 LuckyJet AI Pro v5.4
+🔮 LuckyJet AI Pro v5.5
 
 📊 Tours analysés : {total}
 
@@ -137,7 +156,13 @@ def analyser(historique):
 🔥 Série basse actuelle : {serie_basse}
 🚀 Série haute actuelle : {serie_haute}
 
+
 🎯 Indice statistique : {score}%
+
+{niveau}
+
+📌 Raisons :
+{"\n".join(raisons)}
 
 ⚠️ Analyse basée uniquement sur l'historique.
 """
