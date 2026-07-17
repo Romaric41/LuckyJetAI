@@ -29,12 +29,20 @@ def analyser(historique):
             tendance = "📉 Baisse récente"
         else:
             tendance = "⏳ Stable"
+
+        comparaison = (
+            f"📈 5 derniers : {moyenne_5:.2f}x\n"
+            f"📊 5 précédents : {moyenne_precedents:.2f}x"
+        )
+
     else:
         moyenne_precedents = 0
         tendance = "⏳ Pas assez de données"
+        comparaison = "⏳ Pas assez de tours pour comparer"
 
 
     serie_basse = 0
+
     for x in reversed(historique):
         if x < 1.5:
             serie_basse += 1
@@ -58,7 +66,7 @@ def analyser(historique):
 
 
     return f"""
-🔮 LuckyJet AI Pro v5
+🔮 LuckyJet AI Pro v5.1
 
 📊 Tours analysés : {total}
 
@@ -75,8 +83,8 @@ def analyser(historique):
 🔢 5 derniers tours :
 {derniers_5}
 
-📊 Moyenne 5 derniers : {moyenne_5:.2f}x
-📊 Moyenne 5 précédents : {moyenne_precedents:.2f}x
+📊 Comparaison récente :
+{comparaison}
 
 📡 Tendance : {tendance}
 
