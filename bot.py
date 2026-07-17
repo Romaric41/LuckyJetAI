@@ -21,13 +21,13 @@ from analyse import analyser
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         f"""
-🚀 {BOT_NAME} démarré
+🚀 {BOT_NAME}
 
 Commandes disponibles :
 
 /analyse - Analyse complète
 /stats - Statistiques rapides
-/rapport - Rapport professionnel
+/rapport - Rapport intelligent
 
 Envoie un multiplicateur exemple :
 1.45
@@ -78,32 +78,13 @@ async def rapport(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    total = len(historique)
-
-    moyenne = sum(historique) / total
-    maximum = max(historique)
-    minimum = min(historique)
-
-    derniers_5 = historique[-5:]
-    moyenne_5 = sum(derniers_5) / len(derniers_5)
+    resultat = analyser(historique)
 
     await update.message.reply_text(
         f"""
-📋 LuckyJet AI Pro - Rapport
+📋 LuckyJet AI Pro - Rapport v5.7
 
-📊 Tours analysés : {total}
-
-📈 Moyenne générale : {moyenne:.2f}x
-🚀 Meilleur tour : {maximum:.2f}x
-📉 Plus bas tour : {minimum:.2f}x
-
-📊 Performance récente :
-🔢 Moyenne 5 derniers : {moyenne_5:.2f}x
-
-🧾 Derniers tours :
-{derniers_5}
-
-⚠️ Rapport basé uniquement sur l'historique.
+{resultat}
 """
     )
 
@@ -128,12 +109,15 @@ async def enregistrer(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 initialiser()
 
+
 app = Application.builder().token(TOKEN).build()
+
 
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("analyse", analyse_commande))
 app.add_handler(CommandHandler("stats", stats))
 app.add_handler(CommandHandler("rapport", rapport))
+
 
 app.add_handler(
     MessageHandler(
@@ -142,7 +126,9 @@ app.add_handler(
     )
 )
 
-print("🚀 LuckyJet AI Pro démarré...")
+
+print("🚀 LuckyJet AI Pro v5.7 démarré...")
+
 
 app.run_polling()
 
