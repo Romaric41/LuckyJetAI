@@ -47,11 +47,33 @@ def analyser(historique):
         comparaison = "⏳ Pas assez de tours pour comparer"
 
 
+    # Analyse des 50 derniers tours
+    total_50 = len(derniers_50)
+
+    moyenne_50 = sum(derniers_50) / total_50
+
+    tours_2x_50 = len([x for x in derniers_50 if x >= 2])
+    tours_5x_50 = len([x for x in derniers_50 if x >= 5])
+
+    frequence_50 = (tours_2x_50 / total_50) * 100
+
+
+    # Série basse actuelle
     serie_basse = 0
 
     for x in reversed(historique):
         if x < 1.5:
             serie_basse += 1
+        else:
+            break
+
+
+    # Série haute actuelle
+    serie_haute = 0
+
+    for x in reversed(historique):
+        if x >= 2:
+            serie_haute += 1
         else:
             break
 
@@ -72,7 +94,7 @@ def analyser(historique):
 
 
     return f"""
-🔮 LuckyJet AI Pro v5.2
+🔮 LuckyJet AI Pro v5.4
 
 📊 Tours analysés : {total}
 
@@ -100,12 +122,20 @@ def analyser(historique):
 {derniers_50}
 
 
+📊 Analyse des 50 derniers :
+📈 Moyenne : {moyenne_50:.2f}x
+🚀 Tours ≥2x : {tours_2x_50}
+💎 Tours ≥5x : {tours_5x_50}
+📊 Fréquence ≥2x : {frequence_50:.1f}%
+
+
 📊 Comparaison récente :
 {comparaison}
 
 📡 Tendance : {tendance}
 
 🔥 Série basse actuelle : {serie_basse}
+🚀 Série haute actuelle : {serie_haute}
 
 🎯 Indice statistique : {score}%
 
