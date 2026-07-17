@@ -6,44 +6,40 @@ def analyser(historique):
     total = len(historique)
 
     moyenne = sum(historique) / total
+    maximum = max(historique)
+    minimum = min(historique)
 
-    hautes = len([x for x in historique if x >= 2.00])
-    grosses = len([x for x in historique if x >= 5.00])
-    petites = len([x for x in historique if x < 1.50])
+    hautes = len([x for x in historique if x >= 2])
+    grosses = len([x for x in historique if x >= 5])
+    petites = len([x for x in historique if x < 1.5])
 
     frequence_haute = (hautes / total) * 100
     frequence_grosse = (grosses / total) * 100
 
-
     # Série basse actuelle
     serie_basse = 0
     for x in reversed(historique):
-        if x < 1.50:
+        if x < 1.5:
             serie_basse += 1
         else:
             break
 
+    # 5 derniers tours
+    derniers_5 = historique[-5:]
 
-    # Analyse de tendance
-    if total >= 10:
-        anciens = historique[-20:-10]
-        recents = historique[-10:]
+    # Tendance simple
+    if total >= 5:
+        avant = sum(historique[-5:-2]) / 3
+        recent = sum(historique[-2:]) / 2
 
-        moyenne_ancienne = sum(anciens) / len(anciens)
-        moyenne_recente = sum(recents) / len(recents)
-
-        if moyenne_recente > moyenne_ancienne:
+        if recent > avant:
             tendance = "📈 Hausse"
-        elif moyenne_recente < moyenne_ancienne:
+        elif recent < avant:
             tendance = "📉 Baisse"
         else:
-            tendance = "➡️ Stable"
-
+            tendance = "⏳ Stable"
     else:
         tendance = "⏳ Pas assez de données"
-
-
-    derniers = historique[-20:]
 
 
     score = 50
@@ -51,10 +47,7 @@ def analyser(historique):
     if moyenne >= 2:
         score += 10
 
-    if frequence_haute >= 40:
-        score += 10
-
-    if serie_basse >= 3:
+    if frequence_haute >= 50:
         score += 10
 
     if tendance == "📈 Hausse":
@@ -64,18 +57,30 @@ def analyser(historique):
         score = 100
 
 
-    return (
-        "🔮 LuckyJet AI Pro v3\n\n"
-        f"📊 Tours analysés : {total}\n"
-        f"📈 Moyenne : {moyenne:.2f}x\n\n"
-        f"🚀 ≥ 2.00x : {hautes}\n"
-        f"💎 ≥ 5.00x : {grosses}\n"
-        f"📉 < 1.50x : {petites}\n\n"
-        f"📡 Tendance : {tendance}\n"
-        f"🔥 Série basse : {serie_basse}\n\n"
-        f"📈 Fréquence ≥2x : {frequence_haute:.1f}%\n"
-        f"💎 Fréquence ≥5x : {frequence_grosse:.1f}%\n\n"
-        f"🔢 Derniers tours : {derniers}\n\n"
-        f"🎯 Score statistique : {score}%\n\n"
-        "⚠️ Analyse basée uniquement sur l'historique."
-    )
+    return f"""
+🔮 LuckyJet AI Pro v4
+
+📊 Tours analysés : {total}
+
+📈 Moyenne : {moyenne:.2f}x
+🚀 Maximum : {maximum:.2f}x
+📉 Minimum : {minimum:.2f}x
+
+🚀 Tours ≥ 2x : {hautes}
+💎 Tours ≥ 5x : {grosses}
+
+📈 Fréquence ≥2x : {frequence_haute:.1f}%
+💎 Fréquence ≥5x : {frequence_grosse:.1f}%
+
+📡 Tendance : {tendance}
+
+🔥 Série basse actuelle : {serie_basse}
+
+🔢 5 derniers tours :
+{derniers_5}
+
+🎯 Indice statistique : {score}%
+
+⚠️ Analyse basée uniquement sur l'historique.
+"""
+
