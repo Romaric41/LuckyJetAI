@@ -1,7 +1,6 @@
 import sqlite3
 from config import DATABASE
 
-
 def initialiser():
     connexion = sqlite3.connect(DATABASE)
     curseur = connexion.cursor()
@@ -18,13 +17,13 @@ def initialiser():
     connexion.close()
 
 
-def ajouter_resultat(multiplicateur):
+def ajouter_resultat(valeur):
     connexion = sqlite3.connect(DATABASE)
     curseur = connexion.cursor()
 
     curseur.execute(
         "INSERT INTO historique (multiplicateur) VALUES (?)",
-        (multiplicateur,)
+        (valeur,)
     )
 
     connexion.commit()
@@ -36,12 +35,11 @@ def lire_historique():
     curseur = connexion.cursor()
 
     curseur.execute(
-        "SELECT multiplicateur FROM historique ORDER BY id ASC"
+        "SELECT multiplicateur FROM historique ORDER BY id"
     )
 
-    resultats = curseur.fetchall()
+    donnees = [ligne[0] for ligne in curseur.fetchall()]
 
     connexion.close()
 
-    return [x[0] for x in resultats]
-
+    return donnees
