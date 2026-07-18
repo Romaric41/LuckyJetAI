@@ -23,13 +23,47 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"""
 🚀 {BOT_NAME}
 
+Bienvenue !
+
 Commandes disponibles :
 
 /analyse - Analyse complète
 /stats - Statistiques rapides
 /rapport - Rapport intelligent
+/aide - Liste des commandes
 
 Envoie un multiplicateur exemple :
+1.45
+"""
+    )
+
+
+async def aide(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        """
+🤖 LuckyJet AI Pro v5.8
+
+📌 Commandes disponibles :
+
+/start
+➡️ Démarrer le bot
+
+/analyse
+➡️ Analyse complète de l'historique
+
+/stats
+➡️ Statistiques rapides
+
+/rapport
+➡️ Rapport intelligent avec score
+
+/aide
+➡️ Afficher ce menu
+
+📩 Enregistrement :
+Envoie un multiplicateur.
+
+Exemple :
 1.45
 """
     )
@@ -82,7 +116,7 @@ async def rapport(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         f"""
-📋 LuckyJet AI Pro - Rapport v5.7
+📋 LuckyJet AI Pro - Rapport v5.8
 
 {resultat}
 """
@@ -109,11 +143,11 @@ async def enregistrer(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 initialiser()
 
-
 app = Application.builder().token(TOKEN).build()
 
 
 app.add_handler(CommandHandler("start", start))
+app.add_handler(CommandHandler("aide", aide))
 app.add_handler(CommandHandler("analyse", analyse_commande))
 app.add_handler(CommandHandler("stats", stats))
 app.add_handler(CommandHandler("rapport", rapport))
@@ -127,7 +161,7 @@ app.add_handler(
 )
 
 
-print("🚀 LuckyJet AI Pro v5.7 démarré...")
+print("🚀 LuckyJet AI Pro v5.8 démarré...")
 
 
 app.run_polling()
