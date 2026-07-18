@@ -23,13 +23,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"""
 🚀 {BOT_NAME}
 
-Bienvenue !
-
 Commandes disponibles :
 
 /analyse - Analyse complète
 /stats - Statistiques rapides
 /rapport - Rapport intelligent
+/historique - Derniers multiplicateurs
 /aide - Liste des commandes
 
 Envoie un multiplicateur exemple :
@@ -41,26 +40,29 @@ Envoie un multiplicateur exemple :
 async def aide(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         """
-🤖 LuckyJet AI Pro v5.8
+🤖 LuckyJet AI Pro v5.9
 
-📌 Commandes disponibles :
+📌 Commandes :
 
 /start
 ➡️ Démarrer le bot
 
 /analyse
-➡️ Analyse complète de l'historique
+➡️ Analyse complète
 
 /stats
 ➡️ Statistiques rapides
 
 /rapport
-➡️ Rapport intelligent avec score
+➡️ Rapport intelligent
+
+/historique
+➡️ Voir les derniers multiplicateurs
 
 /aide
 ➡️ Afficher ce menu
 
-📩 Enregistrement :
+📩 Enregistrer un résultat :
 Envoie un multiplicateur.
 
 Exemple :
@@ -103,6 +105,36 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+async def historique(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    historique = lire_historique()
+
+    if not historique:
+        await update.message.reply_text(
+            "📭 Aucun historique disponible."
+        )
+        return
+
+    derniers = historique[-10:]
+
+    liste = "\n".join(
+        [f"🔹 {x}x" for x in derniers]
+    )
+
+    await update.message.reply_text(
+        f"""
+📜 LuckyJet AI Pro - Historique
+
+📊 Total enregistré : {len(historique)}
+
+🔢 10 derniers tours :
+
+{liste}
+
+⚠️ Données basées uniquement sur l'historique.
+"""
+    )
+
+
 async def rapport(update: Update, context: ContextTypes.DEFAULT_TYPE):
     historique = lire_historique()
 
@@ -116,7 +148,7 @@ async def rapport(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         f"""
-📋 LuckyJet AI Pro - Rapport v5.8
+📋 LuckyJet AI Pro - Rapport v5.9
 
 {resultat}
 """
@@ -145,13 +177,12 @@ initialiser()
 
 app = Application.builder().token(TOKEN).build()
 
-
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("aide", aide))
 app.add_handler(CommandHandler("analyse", analyse_commande))
 app.add_handler(CommandHandler("stats", stats))
 app.add_handler(CommandHandler("rapport", rapport))
-
+app.add_handler(CommandHandler("historique", historique))
 
 app.add_handler(
     MessageHandler(
@@ -160,9 +191,7 @@ app.add_handler(
     )
 )
 
-
-print("🚀 LuckyJet AI Pro v5.8 démarré...")
-
+print("🚀 LuckyJet AI Pro v5.9 démarré...")
 
 app.run_polling()
 
